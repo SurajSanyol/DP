@@ -1,0 +1,25 @@
+class Solution {
+public:
+
+   int fibb(int n,vector<int>&dp){
+      // base case
+       if(n==1||n==0){
+        return n;
+       }
+       // step 3: check if ans already exist
+       if(dp[n]!=-1){
+        return dp[n];
+       }
+
+
+       //step 2: store ans in dp array
+       dp[n] = fibb(n-1,dp)+fibb(n-2,dp);
+       return dp[n];
+   }
+    int fib(int n) {
+        //step 1 :create a dp array;
+        vector<int>dp(n+1,-1);
+        int ans = fibb(n,dp);
+        return ans;
+    }
+};
