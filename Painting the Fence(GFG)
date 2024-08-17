@@ -1,0 +1,99 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+#include<stdio.h>
+#include<math.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+    // code hereclass Solution {
+public: 
+
+    // slove by the top down approach(Memoisation) ❤️❤️❤️❤️
+    // long long solveMem(long long n, long long k, vector<long>& dp) {
+    //     int mod = 1e9 + 7;
+    //     if (n == 1) return k;
+    //     if (n == 2) return (k + k * (k - 1)) % mod;
+
+    //     if (dp[n] != -1) {
+    //         return dp[n];
+    //     }
+
+    //     dp[n] = (solveMem(n - 1, k, dp) * (k - 1) % mod + solveMem(n - 2, k, dp) * (k - 1) % mod) % mod;
+
+    //     return dp[n];
+    // }
+    
+    // using tabulation method(Bottom up approach) 😁😁😁😁😁
+    //******************************************************************
+    // long long solveTabulation(long long n, long long k){
+    //     // step 1:create dp vector
+    //     vector<long long>dp(n+1,-1);
+    //     int mod = 1e9 + 7;
+        
+    //     // step 2: base case ko dekho
+    //     dp[1]=k;
+    //     dp[2]=  (k + k * (k - 1)) % mod;
+        
+    //     // step 3: iteration check kro 
+    //     for(int i =3;i<=n;i++){
+    //         dp[i] = (dp[i - 1]* (k - 1) % mod + dp[i - 2]*(k - 1) % mod) % mod;
+    //     }
+        
+    //     return dp[n];
+        
+    // }
+    
+    // space optimization
+    long long spaceOptimization(long long n, long long k){
+        // step 1:create dp vector
+    
+        int mod = 1e9 + 7;
+        
+        // step 2: base case ko dekho
+        long long prev2 = k;
+         if(n==1)return prev2;
+        long long prev1=  (k + k * (k - 1)) % mod;
+           if(n==2)return prev1;
+        
+        
+        
+        // step 3: iteration check kro 
+        for(long long i =3;i<=n;i++){
+           long long  curr = (prev2* (k - 1) % mod + prev1*(k - 1) % mod) % mod;
+             prev2=prev1;
+             prev1=curr;
+        }
+        
+        return prev1;
+        
+    }
+  
+    long long countWays(int n, int k) {
+        // vector<long> dp(n + 1, -1);
+        // return solveMem(n, k, dp);
+        
+        // return  solveTabulation(n, k);
+        
+        return spaceOptimization(n,k);
+    }
+
+};
+
+//{ Driver Code Starts.
+
+int main()
+{
+	
+	int t;
+	cin>>t;
+	while(t--)
+	{
+		int n,k;
+		cin>>n>>k;
+		Solution ob;
+		cout<<ob.countWays(n,k)<<endl;
+	}
+	return 0;
+}
+// } Driver Code Ends
