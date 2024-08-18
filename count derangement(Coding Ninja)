@@ -1,0 +1,50 @@
+#include<vector>
+
+// memoisation 
+ long long int memo(long long int n,vector<long long int>&dp){
+    int mod = 1e9+7;
+    if(n==1)return 0;
+    if(n==2)return 1;
+
+    if(dp[n]!=-1) return dp[n];
+
+    dp[n] = ( ((n-1)%mod)*(memo(n-1,dp)%mod + memo(n-2,dp)%mod ))%mod;
+
+    return dp[n];
+ }
+ // tabulation method ❤️❤️❤️❤️❤️❤️
+
+ long long int tabulation(long long int n){
+     // step 1: create a vector
+     vector<long long int>dp(n+1,-1);
+     int mod = 1e9+7;
+
+     //step 2: base case ko dekho
+    //   dp[0]=0;
+      dp[1] =0;
+      dp[2] =1;
+    
+
+      // step 3: code flow dekho memoisation ka
+      for(int i=3;i<=n;i++){
+          dp[i]=(dp[i-1]*(i-1)%mod + dp[i-2]*(i-1)%mod )%mod;
+      }
+      return dp[n];
+ }
+
+long long int countDerangements(int n) {
+    // Write your code here.
+    //  int mod = 1e9+7;
+    // if(n==1)return 0;
+    // if(n==2)return 1;
+
+    // long long int ans = ( ((n-1)%mod)*(countDerangements(n-1)%mod + countDerangements(n-2)%mod ))%mod;
+
+    // return ans;
+
+    // vector<long long int>dp(n+1,-1);
+    // return memo( n, dp);
+
+    return tabulation(n);
+
+}
