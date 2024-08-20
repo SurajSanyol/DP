@@ -1,0 +1,105 @@
+class Solution {
+  public:
+    // Function to return max value that can be put in knapsack of capacity W.
+    
+    // recursive code ❤️❤️❤️❤️❤️❤️❤️
+   // index = index of last element
+//   int sloveByRec(int W, vector<int>& wt, vector<int>& val,int index ){
+//         // base case (id only one item is present)
+//          if(index==0){
+//              if(wt[index]<=W){
+//                  return val[index];
+//              }
+//              else return 0;
+//          }
+         
+//          int include =0;
+//          // if weight is less than capacity , then include into the knapsack
+//          if(wt[index]<=W)
+//              include = val[index]+sloveByRec(W-wt[index],wt,val,index-1);
+         
+//          int exclude = 0 + sloveByRec(W,wt,val,index-1);
+         
+//          return max(include,exclude);
+//   }
+   
+   
+   // Bottom up Approach(Memoisation) 😁😁😁😁😁😁😁
+     int sloveByMemo(int W, vector<int>& wt, vector<int>& val,int index,vector<vector<int>>&dp ){
+        // base case (id only one item is present)
+         if(index==0){
+             if(wt[index]<=W){
+                 return val[index];
+             }
+             else return 0;
+         }
+         
+         if(dp[index][W]!=-1)return dp[index][W];
+         
+         int include =0;
+         // if weight is less than capacity , then include into the knapsack
+         if(wt[index]<=W)
+             include = val[index]+sloveByMemo(W-wt[index],wt,val,index-1,dp);
+         
+         int exclude = 0 + sloveByMemo(W,wt,val,index-1,dp);
+         
+         dp[index][W]=max(include,exclude);
+         
+         return dp[index][W];
+   }
+
+    int knapSack(int W, vector<int>& wt, vector<int>& val) {
+        // Your code here
+        int n = wt.size();
+        // int ans = sloveByRec(W,wt,val,n-1);
+        // return ans;
+        
+        // Bottom up Approach(Memoisation) 😁😁😁😁😁😁😁
+        vector<vector<int>>dp(n+1,vector<int>(W+1,-1));
+        int ans = sloveByMemo(W,wt,val,n-1,dp);
+        return ans;
+    }
+};
+
+
+
+// tabulation methods⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️
+class Solution {
+  public:
+   int slovUsingTabulation(int W, vector<int>& wt, vector<int>& val, int n)
+{
+    vector<vector<int>> dp(n, vector<int>(W + 1, 0));
+    
+    for (int w = wt[0]; w <= W; w++)
+    {
+        dp[0][w] = val[0];
+    }
+
+    for (int index = 1; index < n; index++)
+    {
+        for (int weight = 0; weight <= W; weight++)
+        {
+            int include = 0;
+            // If the weight is less than or equal to the capacity, include it in the knapsack
+            if (wt[index] <= weight)
+            {
+                include = val[index] + dp[index - 1][weight - wt[index]];
+            }
+
+            int exclude = dp[index - 1][weight];
+
+            dp[index][weight] = max(include, exclude);
+        }
+    }
+
+    return dp[n - 1][W];
+}
+
+int knapSack(int W, vector<int>& wt, vector<int>& val) {
+    int n = wt.size();
+    // Top down approach 🚀🚀🚀🚀
+    int ans = slovUsingTabulation(W, wt, val, n);
+    return ans;
+}
+
+};
