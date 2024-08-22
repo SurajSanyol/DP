@@ -1,0 +1,62 @@
+class Solution {
+public:
+    // bool isPartition(vector<int>& nums, int target, int index) {
+    //     // base case 
+    //     if(target==0) return true;
+    //     if(index==0)
+    //     return (target==nums[0]);
+
+    //     // recursive code 
+
+    //     bool include = false;
+    //     if(target-nums[index]>=0){
+    //         include = isPartition(nums,target-nums[index],index-1);
+    //     }
+    //     bool exclude = isPartition(nums,target,index-1);
+
+    //     return include || exclude;
+    // }
+
+    // memoisation
+    bool isPartition(vector<int>& nums, int target, int index,vector<vector<int>>&dp) {
+        // base case 
+        if(target==0) return true;
+        if(index==0)
+        return (target==nums[0]);
+
+        if(dp[index][target]!=-1){
+            return dp[index][target];
+        }
+
+        // recursive code 
+
+        bool include = false;
+        if(target-nums[index]>=0){
+            include = isPartition(nums,target-nums[index],index-1,dp);
+        }
+        bool exclude = isPartition(nums,target,index-1,dp);
+       
+        dp[index][target]=include || exclude;
+
+        return dp[index][target] ;
+    }
+
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            sum += nums[i];
+        }
+
+        if (sum & 1)
+            return false;
+
+        // return isPartition(nums, sum / 2, n - 1);
+
+        // memoisation
+          vector<vector<int>>dp(n+1,vector<int>(sum/2+1,-1));
+          return isPartition(nums, sum / 2, n - 1,dp);
+
+
+    }
+};
