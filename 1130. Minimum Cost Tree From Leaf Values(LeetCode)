@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int recursion(vector<int> &arr, int left,int right, map<pair<int,int>,int>&maxi  )
+    {
+         // base case 
+         if(left==right)return 0;
+
+          int ans = INT_MAX;
+          for(int i=left;i<right;i++){
+            ans = min(ans,maxi[{left,i}]*maxi[{i+1,right}]+recursion(arr,left,i,maxi)+ recursion(arr,i+1,right,maxi));
+          }
+
+          return ans;
+    }
+
+    // memoisation
+     int memo(vector<int> &arr, int left,int right, map<pair<int,int>,int>&maxi,vector<vector<int>>&dp  )
+    {
+         // base case 
+         if(left==right)return 0;
+
+         if(dp[left][right]!=-1){
+            return dp[left][right];
+         }
+
+          int ans = INT_MAX;
+          for(int i=left;i<right;i++){
+            ans = min(ans,maxi[{left,i}]*maxi[{i+1,right}]+memo(arr,left,i,maxi,dp)+ memo(arr,i+1,right,maxi,dp));
+          }
+          dp[left][right]=ans;
+          return dp[left][right];
+    }
+   
+    int mctFromLeafValues(vector<int>& arr) {
+        map<pair<int,int>,int>maxi;
+        
+         for (int i = 0;i<arr.size();i++){
+            maxi[{i,i}]=arr[i];
+             for(int j=i;j<arr.size();j++){
+                 maxi[{i,j}]=max(arr[j],maxi[{i,j-1}]);
+             }
+         }
+
+         int n = arr.size();
+        //  return recursion(arr,0,n-1,maxi);
+
+        // memoisation
+         vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+         return memo(arr,0,n-1,maxi,dp);
+
+    }
+};
