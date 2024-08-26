@@ -1,0 +1,80 @@
+class Solution {
+public:
+    int rec(string text1, string text2, int i, int j) {
+        // base case
+        if (text1.length() == i)
+            return 0;
+        if (text2.length() == j)
+            return 0;
+
+        int ans = 0;
+
+        if (text1[i] == text2[j]) {
+            ans = 1 + rec(text1, text2, i + 1, j + 1);
+        } else {
+            ans = max(rec(text1, text2, i, j + 1), rec(text1, text2, i + 1, j));
+        }
+
+        return ans;
+    }
+
+    // memoisation 🚀🚀🚀🚀
+
+    int memo(string& text1, string& text2, int i, int j,
+             vector<vector<int>>& dp) {
+        // base case
+        if (text1.length() == i)
+            return 0;
+        if (text2.length() == j)
+            return 0;
+
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+
+        int ans = 0;
+
+        if (text1[i] == text2[j]) {
+            ans = 1 + memo(text1, text2, i + 1, j + 1, dp);
+        } else {
+            ans = max(memo(text1, text2, i, j + 1, dp),
+                      memo(text1, text2, i + 1, j, dp));
+        }
+        dp[i][j] = ans;
+        return dp[i][j];
+    }
+
+    // tabulation 😁😁😁😁
+
+    int tabulation(string& text1, string& text2) {
+
+        vector<vector<int>> dp(text1.length() + 1,
+                               vector<int>(text2.length() + 1, 0));
+
+        for (int i = text1.length()-1; i >= 0; i--) {
+               int ans = 0;
+            for (int j = text2.length()-1; j >= 0; j--) {
+
+                if (text1[i] == text2[j]) {
+                    ans = 1 + dp[i + 1][j + 1];
+                } else {
+                    ans = max(dp[i][j + 1], dp[i + 1][j]);
+                }
+                dp[i][j] = ans;
+              
+            }
+        }
+          return dp[0][0];
+    }
+
+    int longestCommonSubsequence(string text1, string text2) {
+        //  return rec(text1,text2,0,0);
+
+        // memoisation  🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+        // vector<vector<int>> dp(text1.length(), vector<int>(text2.length(), -1));
+        // return memo(text1, text2, 0, 0, dp);
+
+        // tabulation😁😁😁😁😁😁😁😁😁😁😁😁
+         return tabulation(text1,text2);
+    }
+};
