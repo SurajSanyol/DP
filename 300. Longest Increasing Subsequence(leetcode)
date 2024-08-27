@@ -61,6 +61,29 @@ public:
         return dp[0][-1 + 1];
     }
 
+// Best optimal solution 
+  // dp with binary search Timecomplexity is n*logn 😈😈😈😈😈😈😈😈
+     int optimalAns(vector<int>& nums){
+          // base case 
+           if(nums.size()==0) return 0;
+
+           vector<int>ans;
+           ans.push_back(nums[0]);
+
+           for(int i =1;i<nums.size();i++){
+               if(nums[i]>ans.back()){
+                   // include
+                    ans.push_back(nums[i]);
+               }
+               else{
+                    // find the just greater element in ans array from nums[i] element
+                     int index = lower_bound(ans.begin(),ans.end(),nums[i])-ans.begin();
+                     ans[index]=nums[i];
+               }
+           }
+           return ans.size();
+     }
+
     int lengthOfLIS(vector<int>& nums) {
         // int curr = 0;
         // int prev = -1;
