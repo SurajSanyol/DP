@@ -1,0 +1,77 @@
+class Solution {
+public:
+    int rec(vector<int>& nums, int curr, int prev) {
+        // base case
+        if (curr >= nums.size()) {
+            return 0;
+        }
+
+        // recursive call
+        int include = 0;
+        if (prev == -1 || nums[curr] > nums[prev]) {
+            include = 1 + rec(nums, curr + 1, curr);
+        }
+
+        int exclude = rec(nums, curr + 1, prev);
+
+        return max(include, exclude);
+    }
+
+    // memoisation ❤️❤️❤️❤️❤️❤️❤️❤️
+    int memo(vector<int>& nums, int curr, int prev, vector<vector<int>>& dp) {
+        // base case
+        if (curr >= nums.size()) {
+            return 0;
+        }
+
+        if (dp[curr][prev + 1] != -1) {
+            return dp[curr][prev + 1];
+        }
+
+        // recursive call
+        int include = 0;
+        if (prev == -1 || nums[curr] > nums[prev]) {
+            include = 1 + memo(nums, curr + 1, curr, dp);
+        }
+
+        int exclude = memo(nums, curr + 1, prev, dp);
+
+        dp[curr][prev + 1] = max(include, exclude);
+
+        return dp[curr][prev + 1];
+    }
+
+    // tabulation 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+    int tabulation(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+
+        for (int curr = n - 1; curr >= 0; curr--) {
+            for (int prev = curr - 1; prev >= -1; prev--) {
+                int include = 0;
+                if (prev == -1 || nums[curr] > nums[prev]) {
+                    include = 1 + dp[curr + 1][curr + 1];
+                }
+
+                int exclude = dp[curr + 1][prev + 1];
+
+                dp[curr][prev + 1] = max(include, exclude);
+            }
+        }
+        return dp[0][-1 + 1];
+    }
+
+    int lengthOfLIS(vector<int>& nums) {
+        // int curr = 0;
+        // int prev = -1;
+        // return rec(nums, curr, prev);
+
+        // memoisation ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️
+        // int n = nums.size();
+        // vector<vector<int>> dp(n, vector<int>(n, -1));
+        // return memo(nums, curr, prev, dp);
+
+        // tabulation 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+        return tabulation(nums);
+    }
+};
