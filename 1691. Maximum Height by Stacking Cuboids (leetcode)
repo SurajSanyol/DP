@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool check(vector<int>& a, vector<int>& b) {
+        if (b[0] <= a[0] && b[1] <= a[1] && b[2] <= a[2]) {
+            return true;
+        }
+        return false;
+    }
+
+    int getMaxHeight(vector<vector<int>>& envelopes) {
+        int n = envelopes.size();
+        vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i - 1; j >= -1; j--) {
+                int include = 0;
+                if (j == -1 || check(envelopes[i], envelopes[j])) {
+
+                    include = envelopes[i][2] + dp[i + 1][i + 1];
+                }
+
+                int exclude = dp[i + 1][j + 1];
+                dp[i][j + 1] = max(include, exclude);
+            }
+        }
+        return dp[0][-1 + 1];
+    }
+
+    int maxHeight(vector<vector<int>>& cuboids) {
+
+        // each vector
+        for (auto& a : cuboids) {
+            sort(a.begin(), a.end());
+        }
+
+        // sort to the 2D vector according to width
+        sort(cuboids.begin(), cuboids.end());
+
+        return getMaxHeight(cuboids);
+    }
+};
