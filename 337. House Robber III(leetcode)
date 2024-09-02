@@ -1,0 +1,80 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+     int robMaxAmount(TreeNode* root){
+          // base case 
+           if(!root)return 0;
+
+           // ek case solution
+            int isRob=0 ,isNotRob=0;
+             isRob+=root->val;
+             // include
+            if(root->left){
+                isRob+= robMaxAmount(root->left->left) +  robMaxAmount(root->left->right); 
+            }
+
+            if(root->right){
+                isRob+= robMaxAmount(root->right->left) +  robMaxAmount(root->right->right); 
+            }
+            
+             // exclude
+
+             isNotRob+= robMaxAmount(root->left)+robMaxAmount(root->right);
+
+             return max(isNotRob,isRob);
+
+     }
+     
+
+     // now apply dp 
+     // memoisation 😁😁😁😁😁😁😁😁😁😁😁😁😁
+    int robMaxAmount_memo(TreeNode* root,unordered_map<TreeNode*,int>&dp){
+          // base case 
+           if(!root)return 0;
+             
+             if(dp.find(root)!=dp.end()) return dp[root];
+
+           // ek case solution
+            int isRob=0 ,isNotRob=0;
+             isRob+=root->val;
+             // include
+            if(root->left){
+                isRob+= robMaxAmount_memo(root->left->left,dp) +  robMaxAmount_memo(root->left->right ,dp); 
+            }
+
+            if(root->right){
+                isRob+= robMaxAmount_memo(root->right->left ,dp) +  robMaxAmount_memo(root->right->right ,dp); 
+            }
+            
+             // exclude
+
+             isNotRob+= robMaxAmount_memo(root->left ,dp)+robMaxAmount_memo(root->right ,dp);
+
+            
+
+             dp[root]=  max(isNotRob,isRob);
+            
+              return dp[root] ;
+     }
+
+    
+  
+
+
+    int rob(TreeNode* root) {
+        // return robMaxAmount(root);
+
+        unordered_map<TreeNode*,int>dp;
+        return robMaxAmount_memo(root,dp);
+    }
+};
