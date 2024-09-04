@@ -1,0 +1,63 @@
+class Solution {
+public:
+     
+     void convertStrsToNumStrs(vector<string>& strs,vector<pair<int , int>>&numStr){
+          for(auto str:strs){
+              int ones=0,zeros=0;
+               for(auto ch:str){
+                 if(ch=='0') zeros++;
+                 else ones++;
+               }
+               numStr.push_back({zeros,ones});
+          }
+     }
+
+    int solve(vector<pair<int , int>>&numStr , int m,int n , int i){
+         if(i==numStr.size()) return 0;
+         
+         int zeros = numStr[i].first;
+         int ones = numStr[i].second;
+
+         int include = 0;
+          if(m-zeros>=0 && n-ones>=0){
+             include = 1 +solve(numStr,m-zeros, n-ones , i+1);
+          }
+
+        int exclude = solve(numStr,m, n , i+1);
+
+        return max(include, exclude);
+
+    }
+
+    // memoisation 🙏🙏🙏🙏
+      int memo(vector<pair<int , int>>&numStr , int m,int n , int i, vector<vector<vector<int>>>&dp){
+         if(i==numStr.size()) return 0;
+
+         if(dp[i][m][n]!=-1) return dp[i][m][n];
+         
+         int zeros = numStr[i].first;
+         int ones = numStr[i].second;
+
+         int include = 0;
+         if(m-zeros>=0 && n-ones>=0){
+             include = 1 + memo(numStr,m-zeros, n-ones , i+1,dp);
+          }
+
+        int exclude = memo(numStr,m, n , i+1,dp);
+
+
+        dp[i][m][n] = max(include, exclude);
+        return dp[i][m][n];
+
+    }
+
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<pair<int , int>>numStr;  // {no.of zeros, no.of ones}
+        convertStrsToNumStrs(strs,numStr);
+        // return solve(numStr,m,n,0);
+
+        vector<vector<vector<int>>>dp(numStr.size(),vector<vector<int>>(m+1,vector<int>(n+1,-1)));
+         return memo(numStr,m,n,0,dp);
+
+    }
+};
