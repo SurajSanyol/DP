@@ -1,0 +1,79 @@
+class Solution {
+public:
+   
+    int solve(string &s1, string &s2,int i , int j){
+         // base case 
+         int n = s1.length();
+         int m = s2.length();
+         if(i>=n && j>=m) return 0;
+
+         if(i>=n) 
+          return s2[j] + solve(s1,s2,i,j+1);
+
+          if(j>=m) 
+           return s1[i] + solve(s1,s2,i+1,j);
+
+
+          if(s1[i]==s2[j]){
+             return  solve(s1,s2,i+1,j+1);
+          }
+
+
+          // if both are different
+          int  pick = s1[i] + solve(s1,s2 , i+1,j);
+
+          int notPick = s2[j] + solve(s1,s2,i, j+1);
+
+          return min(pick,notPick);
+
+
+    }
+
+    // memoisation  ❤️❤️❤️❤️❤️❤️❤️
+
+     int memo(string &s1, string &s2,int i , int j, vector<vector<int>>&dp){
+         // base case 
+         int n = s1.length();
+         int m = s2.length();
+         if(i>=n && j>=m) return 0;
+
+          if(dp[i][j]!=-1)return dp[i][j];
+
+         if(i>=n) 
+          return s2[j] + memo(s1,s2,i,j+1,dp);
+
+          if(j>=m) 
+           return s1[i] + memo(s1,s2,i+1,j,dp);
+
+
+          if(s1[i]==s2[j]){
+             return  memo(s1,s2,i+1,j+1,dp);
+          }
+
+
+          // if both are different
+          int  pick = s1[i] + memo(s1,s2 , i+1,j,dp);
+
+          int notPick = s2[j] + memo(s1,s2,i, j+1,dp);
+
+          dp[i][j]=min(pick,notPick);
+
+          return dp[i][j];
+
+
+    }
+
+     
+     
+    int minimumDeleteSum(string s1, string s2) {
+
+        // return solve(s1,s2,0,0);
+
+        // memoisation ❤️❤️❤️❤️❤️❤️
+        int n = s1.length();
+         int m = s2.length();
+        vector<vector<int>>dp(n+10,vector<int>(m+10,-1));
+         return memo(s1,s2,0,0,dp);
+
+    }
+};
