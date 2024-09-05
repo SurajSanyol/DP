@@ -1,0 +1,38 @@
+class Solution {
+public:
+      int solve(vector<int>& sat,int i , int time){
+          if(i==sat.size()) return 0;
+
+          // recursion call
+            int include = time*sat[i]+ solve(sat,i+1,time+1);
+
+            int exclude = solve(sat,i+1,time);
+
+            return max(include, exclude);
+      }
+
+      //memoisation 🚀🚀🚀🚀🚀🚀🚀🚀
+       int memo(vector<int>& sat,int i , int time,vector<vector<int>>&dp){
+          if(i==sat.size()) return 0;
+          
+           if( dp[i][time]!=-1) return  dp[i][time];
+          // recursion call
+            int include = time*sat[i]+ memo(sat,i+1,time+1,dp);
+
+            int exclude = memo(sat,i+1,time,dp);
+
+            dp[i][time]= max(include, exclude);
+            return  dp[i][time];
+      }
+
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(),satisfaction.end());
+        // return solve(satisfaction,0,1);
+
+        //memoiation 🚀🚀🚀🚀🚀
+        int n = satisfaction.size();
+        vector<vector<int>>dp(n+1 ,vector<int>(n+1, -1));
+        return memo(satisfaction,0,1, dp);
+
+    }
+};
