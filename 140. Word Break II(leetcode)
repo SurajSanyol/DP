@@ -1,0 +1,74 @@
+class Solution {
+public:
+    vector<string> solve(string& s, unordered_map<string, bool>& dict, int i) {
+        // base case
+        if (i == s.size())
+            return {""};
+
+        //   recursive call
+        vector<string> ans;
+        string word;
+
+        for (int j = i; j < s.size(); j++) {
+            word.push_back(s[j]);
+            if (dict.find(word) == dict.end())
+                continue;
+
+            // find the valid word
+            auto right = solve(s, dict, j + 1);
+
+            for (auto endRightPart : right) {
+                string endPart;
+                if (endRightPart.size() > 0) {
+                    endPart = " " + endRightPart;
+                }
+                ans.push_back(word + endPart);
+            }
+        }
+        return ans;
+    }
+
+
+     // memoisation ❤️❤️❤️❤️❤️❤️❤️❤️
+     vector<string> memo(string& s, unordered_map<string, bool>& dict, int i,unordered_map<int,vector<string>>&dp) {
+        // base case
+        if (i == s.size())
+            return {""};
+
+         if(dp.find(i)!=dp.end()) return dp[i];   
+
+        //   recursive call
+        vector<string> ans;
+        string word;
+
+        for (int j = i; j < s.size(); j++) {
+            word.push_back(s[j]);
+            if (dict.find(word) == dict.end())
+                continue;
+
+            // find the valid word
+            auto right = memo(s, dict, j + 1,dp);
+
+            for (auto endRightPart : right) {
+                string endPart;
+                if (endRightPart.size() > 0) {
+                    endPart = " " + endRightPart;
+                }
+                ans.push_back(word + endPart);
+            }
+        }
+        return dp[i]=ans;
+    }
+
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<string, bool> dict;
+        for (auto word : wordDict)
+            dict[word] = 1;
+        // return solve(s, dict, 0);
+
+        //// memoisation ❤️❤️❤️❤️❤️❤️❤️❤️
+        unordered_map<int,vector<string>>dp;
+         return memo(s, dict, 0,dp);
+
+    }
+};
