@@ -1,0 +1,37 @@
+class Solution {
+public:
+    
+    int memo(string& text1, string& text2, int i, int j,
+             vector<vector<int>>& dp) {
+        // base case
+        if (text1.length() == i)
+            return 0;
+        if (text2.length() == j)
+            return 0;
+
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+
+        int ans = 0;
+
+        if (text1[i] == text2[j]) {
+            ans = 1 + memo(text1, text2, i + 1, j + 1, dp);
+        } else {
+            ans = max(memo(text1, text2, i, j + 1, dp),
+                      memo(text1, text2, i + 1, j, dp));
+        }
+        dp[i][j] = ans;
+        return dp[i][j];
+    }
+
+    int minInsertions(string s) {
+         string s1 = s;
+        reverse(s1.begin(), s1.end());
+
+        vector<vector<int>> dp(s.length(), vector<int>(s1.length(), -1));
+        int ans = memo(s, s1, 0, 0, dp);
+
+        return (s.size() - ans);
+    }
+};
